@@ -201,13 +201,22 @@ span{
 }
 .portfolio-box{
     position: relative;
-    /* border-radius:2rem;
-    box-shadow: 0 0 1em var(--bg-color); */
+    border-radius:2rem;
+    box-shadow: 0 0 1em var(--bg-color);
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items:center;
     margin: 1rem 0 6rem;
+    height:20vw;
+    width:25vw;
+    border: 0.1rem solid var(--bg-color);
+    transition: 0.5s ease-out;
+    /* border-style: 2px solid var(--main-color); */
+}
+.portfolio-box:hover{
+    border: 0.2rem solid var(--main-color);
+    box-shadow: 0 0 1em var(--main-color);
 }
 .portfolio-box img{
     height:16vw;
