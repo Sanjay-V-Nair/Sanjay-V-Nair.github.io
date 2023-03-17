@@ -35,8 +35,8 @@
     <div class="home-content">
         <h3>Hello! Its's Me</h3>
         <h1>Sanjay V Nair</h1>
-        <h3>And I'm a <span>Frontend Developer</span></h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo ducimus quos alias dolore, eos accusantium perferendis hic consequatur velit repellendus, dignissimos magni aut mollitia deleniti sapiente rem necessitatibus delectus. Accusamus.</p>
+        <h3>And I'm a <span id="typer"></span></h3>
+        <p>Welcome to my Personal Portfolio. Hope you enjoy the contents!</p>
         <div class="social-media">
             <a href="#"><i class='bx bxl-meta'></i></a>
             <a href="#"><i class='bx bxl-twitter' ></i></a>
@@ -167,6 +167,37 @@
     </div>
 </footer>
 
+
+
+<!-- JS SCRIPT -->
+<script src="script.js"></script>
+
+<!-- SCROLL REVEAL -->
+<script src="https://unpkg.com/scrollreveal"></script>
+
+
+ <!-- Load library from the CDN -->
+<script src="https://unpkg.com/typed.js@2.0.132/dist/typed.umd.js"></script>
+
+<script>
+    // STRING TYPER
+    var typed = new Typed('#typer',{
+        strings: ['Frontend Develpoer', 'Designer', 'AR/VR Entusiast'],
+        typespeed:100,
+        backspeed:100,
+        backspeed:1000,
+        loop:true
+    });
+
+    //Scroll reveal
+    ScrollReveal({ 
+        reset: true,
+        distance:'80px',
+        duration: 2000,
+        delay: 200
+    });
+    ScrollReveal().reveal('.home-content, .heading', { origin: 'top' });
+</script>
 
 </body>
 </html>

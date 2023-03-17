@@ -66,6 +66,18 @@ section{
 .home-img img{
     width:40vw;
     filter: drop-shadow(1.2em 3em 3em rgba(232, 30, 30, 0.6));
+    animation: floatImage 4s ease-in-out infinite;
+}
+@keyframes floatImage {
+    0%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-2.3rem);
+    }
+    100%{
+        transform: translateY(0);
+    }
 }
 .home-content h3{
     font-size: 3.2rem;
