@@ -197,7 +197,7 @@
             typeSpeed: 100,
             backSpeed: 100,
             backDelay: 1000,
-            loop: true,
+            loop: true
         });
 
         //Scroll reveal
@@ -205,7 +205,7 @@
             reset: false,
             distance: '80px',
             duration: 2000,
-            delay: 200,
+            delay: 200
         });
         ScrollReveal().reveal('.home-content, .heading', { origin: 'top' });
         ScrollReveal().reveal('.home-img, .services-container, .portfolio-box, .contact form', { origin: 'bottom' });
@@ -214,20 +214,20 @@
 
 
         //threejs
-        import * as THREE from 'three';
+        // import * as THREE from 'three';
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // const scene = new THREE.Scene();
+        // const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+        // const renderer = new THREE.WebGLRenderer();
+        // renderer.setSize(window.innerWidth, window.innerHeight);
+        // document.body.appendChild(renderer.domElement);
 
-        const loader = new THREE.TextureLoader();
-        const texture = loader.load('pana.png');
+        // const loader = new THREE.TextureLoader();
+        // const texture = loader.load('pana.png');
 
-        const geometry = new THREE.SphereGeometry(500, 60, 40);
-        geometry.scale(-1, 1, 1);
+        // const geometry = new THREE.SphereGeometry(500, 60, 40);
+        // geometry.scale(-1, 1, 1);
     </script>
 
 </body>
