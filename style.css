@@ -234,6 +234,14 @@ span {
     transform: scale(1.02);
 }
 
+.subheading {
+    text-align: center;
+    font-size: 3rem;
+    margin: 5rem 0 2rem;
+    color: var(--main-color);
+}
+
+
 .portfolio {
     background: var(--second-bg-color);
 }
