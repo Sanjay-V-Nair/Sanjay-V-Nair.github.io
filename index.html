@@ -1,291 +1,1223 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanjay V Nair | Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjay V Nair | Game Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050508;
+  --surface: #0a0a12;
+  --accent: #00ffcc;
+  --accent2: #ff2d6b;
+  --accent3: #7b2fff;
+  --text: #e8e8f0;
+  --muted: #4a4a6a;
+  --glow: 0 0 40px rgba(0,255,204,0.4);
+  --glow2: 0 0 40px rgba(255,45,107,0.4);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  cursor: none;
+  overflow-x: hidden;
+}
+.cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, background 0.3s;
+  mix-blend-mode: screen;
+}
+.cursor-trail {
+  position: fixed;
+  width: 40px; height: 40px;
+  border: 1px solid rgba(0,255,204,0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: all 0.15s ease-out;
+}
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 2rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(5,5,8,0.6);
+  border-bottom: 1px solid rgba(0,255,204,0.05);
+}
+.logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-shadow: var(--glow);
+}
+.nav-links { display: flex; gap: 3rem; list-style: none; }
+.nav-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: color 0.3s, text-shadow 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--accent); text-shadow: var(--glow); }
+.nav-links a:hover::after { width: 100%; }
 
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+/* HERO */
+#home {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
+  overflow: hidden;
+}
+#hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+}
+.hero-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 5px;
+  color: var(--accent);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.3s forwards;
+}
+.hero-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(5rem, 12vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ffffff 0%, #00ffcc 50%, #7b2fff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.5s forwards;
+  position: relative;
+}
+.hero-role {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: 2px;
+  margin: 1rem 0 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.7s forwards;
+}
+.hero-role span { color: var(--accent); font-weight: 600; }
+.hero-desc {
+  font-size: 1.05rem;
+  color: rgba(232,232,240,0.6);
+  line-height: 1.8;
+  max-width: 450px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.9s forwards;
+}
+.hero-btns {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.8s 1.1s forwards;
+}
+.btn-primary {
+  padding: 1rem 2.5rem;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+.btn-primary:hover { color: var(--bg); }
+.btn-primary:hover::before { transform: scaleX(1); }
+.btn-secondary {
+  padding: 1rem 2.5rem;
+  background: transparent;
+  border: 1px solid var(--muted);
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: none;
+  transition: all 0.3s;
+}
+.btn-secondary:hover { border-color: var(--accent2); color: var(--accent2); box-shadow: var(--glow2); }
+.hero-socials {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeIn 1s 1.5s forwards;
+}
+.hero-socials a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 2px;
+  writing-mode: vertical-rl;
+  transition: color 0.3s, transform 0.3s;
+}
+.hero-socials a:hover { color: var(--accent); transform: translateX(-4px); }
+.scroll-ind {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeIn 1s 2s forwards;
+}
+.scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+.scroll-ind span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--muted);
+}
 
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="icon" href="images/pic.png">
+/* ABOUT */
+#about {
+  position: relative;
+  min-height: 100vh;
+  padding: 10rem 5%;
+  display: flex;
+  align-items: center;
+  gap: 8%;
+  overflow: hidden;
+}
+#about::before {
+  content: 'ABOUT';
+  position: absolute;
+  top: 50%;
+  left: -2%;
+  transform: translateY(-50%) rotate(-90deg);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20vw;
+  color: rgba(0,255,204,0.02);
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: 10px;
+}
+.about-3d-box {
+  position: relative;
+  flex-shrink: 0;
+  width: 280px;
+  height: 320px;
+  perspective: 900px;
+}
+.about-card-3d {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCube 8s ease-in-out infinite alternate;
+}
+.about-card-face {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,255,204,0.08), rgba(123,47,255,0.08));
+  border: 1px solid rgba(0,255,204,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.about-card-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,255,204,0.12) 0%, transparent 60%, rgba(123,47,255,0.12) 100%);
+}
+.card-scan {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--accent), transparent);
+  animation: scan 3s ease-in-out infinite;
+  z-index: 3;
+}
+.card-corner {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-color: var(--accent);
+  border-style: solid;
+  border-width: 0;
+  z-index: 3;
+}
+.card-corner.tl { top: 8px; left: 8px; border-top-width: 2px; border-left-width: 2px; }
+.card-corner.tr { top: 8px; right: 8px; border-top-width: 2px; border-right-width: 2px; }
+.card-corner.bl { bottom: 8px; left: 8px; border-bottom-width: 2px; border-left-width: 2px; }
+.card-corner.br { bottom: 8px; right: 8px; border-bottom-width: 2px; border-right-width: 2px; }
+.about-avatar-placeholder {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 7rem;
+  color: rgba(0,255,204,0.15);
+  letter-spacing: 8px;
+  z-index: 2;
+}
+.about-text { flex: 1; }
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 5px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: block;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 1;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+}
+.section-title .highlight { color: var(--accent); }
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: rgba(232,232,240,0.7);
+  margin-bottom: 1.5rem;
+}
+.stat-row {
+  display: flex;
+  gap: 3rem;
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(0,255,204,0.1);
+  flex-wrap: wrap;
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+.hr-accent {
+  width: 60px;
+  height: 2px;
+  background: var(--accent);
+  margin: 1.5rem 0;
+  position: relative;
+}
+.hr-accent::after {
+  content: '';
+  position: absolute;
+  right: -8px; top: 50%;
+  transform: translateY(-50%);
+  width: 4px; height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+/* SKILLS */
+#skills {
+  position: relative;
+  min-height: 100vh;
+  padding: 10rem 5%;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,255,204,0.04) 0%, transparent 70%);
+}
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2px;
+  margin-top: 5rem;
+}
+.skill-card {
+  background: var(--surface);
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+  cursor: none;
+}
+.skill-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,255,204,0.05) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.skill-card:hover { transform: translateY(-8px) scale(1.01); }
+.skill-card:hover::before { opacity: 1; }
+.skill-card-border {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.5s ease;
+}
+.skill-card:hover .skill-card-border { width: 100%; }
+.skill-icon { font-size: 3rem; margin-bottom: 1.5rem; display: block; }
+.skill-card h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+}
+.skill-card .skill-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+.skill-bar-wrap { margin-top: 4rem; }
+.skill-bar-item { margin-bottom: 1.8rem; }
+.skill-bar-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.skill-bar-track {
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+  position: relative;
+}
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--accent), var(--accent3));
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.23,1,0.32,1);
+  position: relative;
+}
+.skill-bar-fill::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent);
+}
+.tools-section { margin-top: 5rem; }
+.tools-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.tools-row { display: flex; flex-wrap: wrap; gap: 1rem; }
+.tool-badge {
+  padding: 0.6rem 1.5rem;
+  border: 1px solid rgba(0,255,204,0.15);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  transition: all 0.3s;
+  cursor: none;
+}
+.tool-badge:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: inset 0 0 20px rgba(0,255,204,0.07), var(--glow);
+}
+
+/* PROJECTS */
+#projects {
+  position: relative;
+  min-height: 100vh;
+  padding: 10rem 5%;
+  background: var(--surface);
+  overflow: hidden;
+}
+.projects-header { margin-bottom: 5rem; }
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.project-grid .featured { grid-column: span 2; }
+.proj-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  cursor: none;
+  background: var(--bg);
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+.proj-card.featured { aspect-ratio: 16/9; }
+.proj-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(80%) contrast(1.1);
+  transition: transform 0.7s cubic-bezier(0.23,1,0.32,1), filter 0.5s;
+}
+.proj-card:hover .proj-img {
+  transform: scale(1.08);
+  filter: grayscale(0%) contrast(1.1);
+}
+.proj-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5,5,8,0.97) 0%, rgba(5,5,8,0.4) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  transform: translateY(65%);
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+.proj-card:hover .proj-overlay { transform: translateY(0); }
+.proj-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+}
+.proj-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.proj-desc {
+  font-size: 0.85rem;
+  color: rgba(232,232,240,0.6);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+.proj-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-decoration: none;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: gap 0.3s;
+}
+.proj-link:hover { gap: 1rem; }
+.proj-corner {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  width: 16px; height: 16px;
+  border-top: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translate(-4px, 4px);
+}
+.proj-card:hover .proj-corner { opacity: 1; transform: translate(0,0); }
+.proj-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(0,255,204,0.04), rgba(123,47,255,0.04));
+  border: 1px solid rgba(0,255,204,0.08);
+}
+.proj-placeholder-icon { font-size: 4rem; opacity: 0.2; }
+
+/* CONTACT */
+#contact {
+  position: relative;
+  min-height: 70vh;
+  padding: 10rem 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  overflow: hidden;
+}
+.contact-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(0,255,204,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.contact-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 10vw, 10rem);
+  line-height: 0.9;
+  letter-spacing: 4px;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #ffffff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.contact-email {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(0.75rem, 2vw, 1.1rem);
+  color: var(--muted);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 4rem;
+  transition: color 0.3s;
+}
+.contact-email a { color: inherit; text-decoration: none; }
+.contact-email:hover { color: var(--accent); }
+.contact-socials { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+.soc-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 0.8rem 1.5rem;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.soc-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 1px;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+.soc-link:hover { color: var(--accent); border-color: rgba(0,255,204,0.2); }
+.soc-link:hover::before { width: 100%; }
+
+/* FOOTER */
+footer {
+  padding: 3rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(0,255,204,0.05);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-copy {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 2px;
+}
+.footer-back {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.footer-back:hover { color: var(--accent); }
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.23,1,0.32,1), transform 0.8s cubic-bezier(0.23,1,0.32,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+.section-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8rem;
+  color: rgba(0,255,204,0.03);
+  position: absolute;
+  top: 5rem;
+  right: 5%;
+  letter-spacing: 10px;
+  pointer-events: none;
+}
+
+/* KEYFRAMES */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes rotateCube {
+  0%   { transform: perspective(900px) rotateX(0deg) rotateY(0deg); }
+  25%  { transform: perspective(900px) rotateX(6deg) rotateY(-10deg); }
+  75%  { transform: perspective(900px) rotateX(-6deg) rotateY(10deg); }
+  100% { transform: perspective(900px) rotateX(0deg) rotateY(0deg); }
+}
+@keyframes scan {
+  0%   { top: -2px; opacity: 1; }
+  100% { top: 102%; opacity: 0; }
+}
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50%       { transform: scaleY(0.5); opacity: 0.4; }
+}
+
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  #about { flex-direction: column; padding: 8rem 5% 5rem; }
+  .project-grid { grid-template-columns: 1fr 1fr; }
+  .project-grid .featured { grid-column: span 2; }
+  .hero-socials { display: none; }
+}
+@media (max-width: 600px) {
+  .project-grid { grid-template-columns: 1fr; }
+  .project-grid .featured { grid-column: span 1; }
+}
+</style>
 </head>
-
 <body>
 
-    <header class="header">
+<div class="noise"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
 
-        <a href="#" class="logo">Portfolio</a>
+<nav>
+  <div class="logo-text">SVN</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-        <i class='bx bx-menu' id="menu-icon"></i>
+<!-- HERO -->
+<section id="home">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-tag">// Game Developer &amp; Graphics Programmer</p>
+    <h1 class="hero-name" data-text="SANJAY V NAIR">SANJAY<br>V NAIR</h1>
+    <p class="hero-role">Building worlds at the <span>intersection of code &amp; art</span></p>
+    <p class="hero-desc">Passionate game developer crafting experiences that feel alive — blending logic, design, and storytelling into interactive worlds.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="https://drive.google.com/file/d/1s-x7sffthOqdasQH9mr7_LtvdkxvEJVs/view" target="_blank" class="btn-secondary">Download CV</a>
+    </div>
+  </div>
+  <div class="hero-socials">
+    <a href="https://github.com/Sanjay-V-Nair" target="_blank">GITHUB</a>
+    <a href="https://www.linkedin.com/in/sanjay-v-nair/" target="_blank">LINKEDIN</a>
+    <a href="https://www.instagram.com/epsilon_infinity/" target="_blank">INSTAGRAM</a>
+    <a href="https://twitter.com/SanjayVNair06" target="_blank">TWITTER</a>
+  </div>
+  <div class="scroll-ind">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
 
-        <nav class="navbar">
-            <a href="#home" class="active">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Skills</a>
-            <a href="#porfolio">Portfolio</a>
-            <a href="#contact">Contact</a>
-        </nav>
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-num">01</div>
+  <div class="about-3d-box reveal">
+    <div class="about-card-3d">
+      <div class="about-card-face">
+        <div class="about-avatar-placeholder">SVN</div>
+        <div class="card-scan"></div>
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+      </div>
+    </div>
+  </div>
+  <div class="about-text">
+    <span class="section-label reveal">// Who Am I</span>
+    <h2 class="section-title reveal reveal-delay-1">ABOUT <span class="highlight">ME</span></h2>
+    <div class="hr-accent reveal reveal-delay-2"></div>
+    <p class="reveal reveal-delay-2">Hey! I'm <strong style="color:var(--accent)">Sanjay V Nair</strong>, a passionate <strong>Game Developer</strong> who loves crafting experiences that feel alive — blending logic, design, and storytelling into interactive worlds.</p>
+    <p class="reveal reveal-delay-3">What started as small experiments turned into a constant pursuit of building systems that are not just functional, but meaningful. I find beauty in both the code and the chaos of creation.</p>
+    <div class="stat-row reveal reveal-delay-4">
+      <div class="stat-item">
+        <div class="stat-num" data-count="2">0</div>
+        <div class="stat-label">Years in Industry</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-count="1">0</div>
+        <div class="stat-label">Years Full-Time</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-count="6">0</div>
+        <div class="stat-label">Projects Shipped</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    </header>
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-num">02</div>
+  <span class="section-label reveal">// What I Do</span>
+  <h2 class="section-title reveal reveal-delay-1">MY <span class="highlight">SKILLS</span></h2>
+  <div class="hr-accent reveal reveal-delay-1"></div>
 
-    <!-- HOME SECTION -->
-    <section class="home" id="home">
-        <div class="home-content">
-            <h3>Hello! It's Me</h3>
-            <h1>Sanjay V Nair</h1>
-            <h3>And I'm a <span id="typer"></span></h3>
-            <p>Welcome to my Personal Portfolio. Hope you enjoy the surfing through!</p>
-            <div class="social-media">
-                <a href="https://www.facebook.com/sanjay.kizhakkankozhuval" target=_blank><i
-                        class='bx bxl-meta'></i></a>
-                <a href="https://twitter.com/SanjayVNair06" target=_blank><i class='bx bxl-twitter'></i></a>
-                <a href="https://www.instagram.com/epsilon_infinity/" target=_blank><i
-                        class='bx bxl-instagram-alt'></i></a>
-                <a href="https://www.linkedin.com/in/sanjay-v-nair/" target=_blank><i
-                        class='bx bxl-linkedin-square'></i></a>
-                <a href="https://github.com/Sanjay-V-Nair" target=_blank><i class='bx bxl-github'></i></a>
-            </div>
-            <a href="https://drive.google.com/file/d/1s-x7sffthOqdasQH9mr7_LtvdkxvEJVs/view" class="btn" type=_blank>Download CV</a>
-        </div>
+  <div class="skills-grid reveal reveal-delay-2">
+    <div class="skill-card">
+      <span class="skill-icon">🎮</span>
+      <h3>Game Development</h3>
+      <p class="skill-sub">Interactive Systems</p>
+      <div class="skill-card-border"></div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">⚡</span>
+      <h3>Graphics Programming</h3>
+      <p class="skill-sub">Shaders &amp; Rendering</p>
+      <div class="skill-card-border"></div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🌐</span>
+      <h3>AR / VR</h3>
+      <p class="skill-sub">Extended Reality</p>
+      <div class="skill-card-border"></div>
+    </div>
+  </div>
 
-        <div class="home-img">
-            <img src="images/pic.png" alt="">
-        </div>
-    </section>
+  <div class="skill-bar-wrap reveal reveal-delay-3">
+    <div class="skill-bar-item">
+      <div class="skill-bar-header"><span>Unity</span><span>90%</span></div>
+      <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-bar-header"><span>C# / Game Logic</span><span>85%</span></div>
+      <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-bar-header"><span>Playworks</span><span>80%</span></div>
+      <div class="skill-bar-track"><div class="skill-bar-fill" data-width="80"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-bar-header"><span>Git Version Control</span><span>75%</span></div>
+      <div class="skill-bar-track"><div class="skill-bar-fill" data-width="75"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-bar-header"><span>Shader / Graphics</span><span>70%</span></div>
+      <div class="skill-bar-track"><div class="skill-bar-fill" data-width="70"></div></div>
+    </div>
+  </div>
 
+  <div class="tools-section reveal reveal-delay-4">
+    <p class="tools-title">// Tools &amp; Frameworks</p>
+    <div class="tools-row">
+      <div class="tool-badge">Unity</div>
+      <div class="tool-badge">Playworks</div>
+      <div class="tool-badge">Git</div>
+      <div class="tool-badge">C#</div>
+      <div class="tool-badge">HLSL</div>
+      <div class="tool-badge">Python</div>
+      <div class="tool-badge">OpenCV</div>
+    </div>
+  </div>
+</section>
 
-    <!-- ABOUT SECTION -->
-    <section class="about" id="about">
-        <div class="about-img">
-            <img src="images/pic4.png" alt="">
-        </div>
-        <div class="about-content">
-            <h2 class="heading">About <span>Me</span></h2>
-            <h3>Game Developer</h3>
-            <p>Hey Guys! I'm <b>Sanjay V Nair</b>, a passionate <b>Game Developer</b> who loves crafting experiences that 
-                feel alive — blending logic, design, and storytelling into interactive worlds. What started as small 
-                experiments turned into a constant pursuit of building systems that are not just functional, 
-                but meaningful. I enjoy shaping gameplay that connects with players, designing smooth flows, and finding 
-                beauty in both the code and the chaos of creation.</p>
-            <br>
-                <p> I have been in the Gaming industry for the last 2 years, with almost 1 year of experience as a Full time Game Developer.</p>
-            <!-- <a href="#" class="btn">Read More</a> -->
-        </div>
-    </section>
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-num">03</div>
+  <div class="projects-header">
+    <span class="section-label reveal">// What I've Built</span>
+    <h2 class="section-title reveal reveal-delay-1">LATEST <span class="highlight">PROJECTS</span></h2>
+    <div class="hr-accent reveal reveal-delay-1"></div>
+  </div>
+  <div class="project-grid reveal reveal-delay-2">
+    <div class="proj-card featured">
+      <img class="proj-img" src="images/ProceduralMap.png" alt="Procedural Gen"
+        onerror="this.style.display='none'; this.parentNode.querySelector('.proj-placeholder').style.display='flex'">
+      <div class="proj-placeholder" style="display:none"><div class="proj-placeholder-icon">🗺️</div></div>
+      <div class="proj-overlay">
+        <p class="proj-num">001 // FEATURED</p>
+        <h4 class="proj-title">Procedural Generation</h4>
+        <p class="proj-desc">Procedurally generated tile-based map with extensive configurability on generation algorithms and biome distribution.</p>
+        <span class="proj-link">View Project →</span>
+      </div>
+      <div class="proj-corner"></div>
+    </div>
+    <div class="proj-card">
+      <img class="proj-img" src="images/doofusEscape.png" alt="Doofus Escape"
+        onerror="this.style.display='none'; this.parentNode.querySelector('.proj-placeholder').style.display='flex'">
+      <div class="proj-placeholder" style="display:none"><div class="proj-placeholder-icon">🏃</div></div>
+      <div class="proj-overlay">
+        <p class="proj-num">002</p>
+        <h4 class="proj-title">Doofus Escape</h4>
+        <p class="proj-desc">Platformer game — complete missions within the time limit and reach the next tile.</p>
+        <span class="proj-link">View Project →</span>
+      </div>
+      <div class="proj-corner"></div>
+    </div>
+    <div class="proj-card">
+      <img class="proj-img" src="images/diframework.png" alt="DI Framework"
+        onerror="this.style.display='none'; this.parentNode.querySelector('.proj-placeholder').style.display='flex'">
+      <div class="proj-placeholder" style="display:none"><div class="proj-placeholder-icon">⚙️</div></div>
+      <div class="proj-overlay">
+        <p class="proj-num">003</p>
+        <h4 class="proj-title">Lightweight DI Framework</h4>
+        <p class="proj-desc">Dependency Injection framework for Unity with scene load initialization and runtime attribute-based injection.</p>
+        <span class="proj-link">View Project →</span>
+      </div>
+      <div class="proj-corner"></div>
+    </div>
+    <div class="proj-card">
+      <img class="proj-img" src="images/robo.png" alt="Computer Vision"
+        onerror="this.style.display='none'; this.parentNode.querySelector('.proj-placeholder').style.display='flex'">
+      <div class="proj-placeholder" style="display:none"><div class="proj-placeholder-icon">👁️</div></div>
+      <div class="proj-overlay">
+        <p class="proj-num">004</p>
+        <h4 class="proj-title">Computer Vision</h4>
+        <p class="proj-desc">Real-time mask detection — detects whether a person is wearing a mask or not.</p>
+        <a href="https://github.com/Sanjay-V-Nair/FaceMaskDetection" target="_blank" class="proj-link">GitHub →</a>
+      </div>
+      <div class="proj-corner"></div>
+    </div>
+    <div class="proj-card">
+      <img class="proj-img" src="images/art.png" alt="AI Art"
+        onerror="this.style.display='none'; this.parentNode.querySelector('.proj-placeholder').style.display='flex'">
+      <div class="proj-placeholder" style="display:none"><div class="proj-placeholder-icon">🎨</div></div>
+      <div class="proj-overlay">
+        <p class="proj-num">005</p>
+        <h4 class="proj-title">AI Art</h4>
+        <p class="proj-desc">Numerous AI-generated artworks exploring digital aesthetics and generative art forms.</p>
+        <a href="https://www.instagram.com/epsilon_infinity/" target="_blank" class="proj-link">Instagram →</a>
+      </div>
+      <div class="proj-corner"></div>
+    </div>
+    <div class="proj-card">
+      <img class="proj-img" src="images/web.png" alt="Web Design"
+        onerror="this.style.display='none'; this.parentNode.querySelector('.proj-placeholder').style.display='flex'">
+      <div class="proj-placeholder" style="display:none"><div class="proj-placeholder-icon">🌐</div></div>
+      <div class="proj-overlay">
+        <p class="proj-num">006</p>
+        <h4 class="proj-title">Web Design</h4>
+        <p class="proj-desc">This very portfolio — handcrafted with meticulous attention to aesthetics and interactions.</p>
+        <span class="proj-link">You're Here ✦</span>
+      </div>
+      <div class="proj-corner"></div>
+    </div>
+  </div>
+</section>
 
-    <!-- SERVICES SECTION -->
-    <section class="services" id="services">
-        <h2 class="heading">My  <span>Skills</span></h2>
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-bg"></div>
+  <div class="section-num">04</div>
+  <h2 class="contact-title reveal">LET'S<br>TALK</h2>
+  <p class="contact-email reveal reveal-delay-1">
+    <a href="mailto:mrsanjayvnair@gmail.com">mrsanjayvnair@gmail.com</a>
+  </p>
+  <div class="contact-socials reveal reveal-delay-2">
+    <a href="https://github.com/Sanjay-V-Nair" target="_blank" class="soc-link">GitHub</a>
+    <a href="https://www.linkedin.com/in/sanjay-v-nair/" target="_blank" class="soc-link">LinkedIn</a>
+    <a href="https://www.instagram.com/epsilon_infinity/" target="_blank" class="soc-link">Instagram</a>
+    <a href="https://twitter.com/SanjayVNair06" target="_blank" class="soc-link">Twitter</a>
+    <a href="https://www.facebook.com/sanjay.kizhakkankozhuval" target="_blank" class="soc-link">Facebook</a>
+  </div>
+</section>
 
-        <div class="services-container">
-            <div class="services-box">
-                <i class='bx bxs-game'></i>
-                <h3>Game Development</h3>
-                <!-- <p>I am a Frontend Developer with skills in HTML, CSS and beginner level JS. The porfolio website you
-                    see now is made by myslef using the same skills I just mentioned. Specialized in Frontend with
-                    quality UI</p>
-                <a href="#" class="btn">Read More</a> -->
-            </div>
+<footer>
+  <p class="footer-copy">© 2025–26 Sanjay V Nair — All Rights Reserved</p>
+  <a href="#home" class="footer-back">↑ Back to Top</a>
+</footer>
 
-            <div class="services-box">
-                <i class='bx-code-curly'></i>
-                <h3>Graphics Programming</h3>
-                <!-- <p> AI is a blooming industry and AI Art is no exception. Even though it may not give off the emotions
-                    of a masterpiece done by an artist, it sure is able to create mindblowing arts and designs. You can
-                    see some of my AI Arts in my instagram page</p>
-                <a href="#" class="btn">Read More</a> -->
-            </div>
-        </div>
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mx = 0, my = 0, tx = 0, ty = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+});
+(function animTrail() {
+  tx += (mx - tx) * 0.15; ty += (my - ty) * 0.15;
+  trail.style.left = tx + 'px'; trail.style.top = ty + 'px';
+  requestAnimationFrame(animTrail);
+})();
+document.querySelectorAll('a, .proj-card, .skill-card, .tool-badge').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    cursor.style.background = '#ff2d6b';
+    trail.style.borderColor = 'rgba(255,45,107,0.5)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursor.style.background = '#00ffcc';
+    trail.style.borderColor = 'rgba(0,255,204,0.4)';
+  });
+});
 
-        <h3 class="subheading">Tools & Frameworks</h3>
-        <div class="services-container">
-            <div class="services-box">
-                <i class='bx bxl-unity'></i>
-                <h3>Unity</h3>
-                <!-- <p> IN PROGRESS... </p>
-                <a href="#" class="btn">Read More</a> -->
-            </div>
-            <div class="services-box">
-                <i class='bx bxl-unity'></i>
-                <h3>Playworks</h3>
-                <!-- <p> IN PROGRESS... </p>
-                <a href="#" class="btn">Read More</a> -->
-            </div>
-            <div class="services-box">
-                <i class='bx bxl-git'></i>
-                <h3>Git Version Control</h3>
-                <!-- <p> IN PROGRESS... </p>
-                <a href="#" class="btn">Read More</a> -->
-            </div>
-        </div>
+// HERO CANVAS
+const canvas = document.getElementById('hero-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', () => { resize(); init(); });
 
-    </section>
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
 
-    <!-- PORTFOLIO SECTION -->
-    <section class="portfolio" id="porfolio">
-        <h2 class="heading">Latest <span>Projects</span></h2>
-        <!-- <br><br>
-        <div class="subheading"><h2 style="text-align: center;">Game Development Projects are soon to be updated!</h2></div>
-        <br> -->
-        <div class="portfolio-container">
+class Particle {
+  constructor() { this.reset(true); }
+  reset(rand) {
+    this.x = rand ? Math.random() * W : (Math.random() > 0.5 ? 0 : W);
+    this.y = rand ? Math.random() * H : Math.random() * H;
+    this.z = Math.random() * 1.5 + 0.3;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.size = Math.random() * 1.2 + 0.3;
+    this.alpha = Math.random() * 0.5 + 0.1;
+    const r = Math.random();
+    this.color = r > 0.75 ? '#00ffcc' : r > 0.5 ? '#7b2fff' : r > 0.25 ? '#ff2d6b' : '#ffffff';
+  }
+  update() {
+    const dx = this.x - mouseX, dy = this.y - mouseY;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < 100) { const f = (100-d)/100*0.6; this.vx += (dx/d)*f; this.vy += (dy/d)*f; }
+    this.vx *= 0.97; this.vy *= 0.97;
+    this.x += this.vx * this.z; this.y += this.vy * this.z;
+    if (this.x < -10 || this.x > W+10 || this.y < -10 || this.y > H+10) this.reset(true);
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color; ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * this.z, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
 
-            <div class="portfolio-box">
-                <img src="images/ProceduralMap.png" alt="">
-                <div class="portfolio-layer">
-                    <h4>Procedural Generation</h4>
-                    <p>Procedurally Generate Tile-based map, with extensive configurability on generation</p>
-                    <!-- <a href="#"><i class='bx bx-link-external'></i></a> -->
-                </div>
-            </div>
+function init() {
+  particles = [];
+  const n = Math.min(Math.floor(W*H/6000), 200);
+  for (let i = 0; i < n; i++) particles.push(new Particle());
+}
+init();
 
-            <div class="portfolio-box">
-                <img src="images/doofusEscape.png" alt="">
-                <div class="portfolio-layer">
-                    <h4>Doofus Escape - Game</h4>
-                    <p>A platformer based game where the user has to constantly complete missions on a tile within the time limit and reach the next one.
-                    </p>
-                    <!-- <a href="#"><i class='bx bx-link-external'></i></a> -->
-                </div>
-            </div>
+function drawConns() {
+  const maxDist = 90;
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i+1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < maxDist) {
+        ctx.save();
+        ctx.globalAlpha = (1-d/maxDist)*0.07;
+        ctx.strokeStyle = '#00ffcc'; ctx.lineWidth = 0.5;
+        ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
+}
 
-            <div class="portfolio-box">
-                <img src="images/diframework.png" alt="">
-                <div class="portfolio-layer">
-                    <h4>Lighweight DI Framework</h4>
-                    <p>A Lightweight Dependency Injection Framework for Injecting controllers to necessary Views, with scene load initialization and dynamic runtime attribute-based injection to views.
-                    </p>
-                    <!-- <a href="#"><i class='bx bx-link-external'></i></a> -->
-                </div>
-            </div>
+let gOff = 0;
+function drawGrid() {
+  gOff += 0.25;
+  const sp = 80;
+  ctx.save();
+  ctx.strokeStyle = 'rgba(0,255,204,0.025)'; ctx.lineWidth = 1;
+  for (let y = (gOff%sp)-sp; y < H+sp; y += sp) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  for (let x = 0; x < W+sp; x += sp) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  ctx.restore();
+}
 
+let ca = 0;
+function wireCube(cx, cy, sz, rx, ry) {
+  const c = Math.cos, s = Math.sin;
+  const verts = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
+  const pts = verts.map(([x,y,z]) => {
+    let x1=x*c(ry)+z*s(ry), z1=-x*s(ry)+z*c(ry);
+    let y1=y*c(rx)-z1*s(rx), z2=y*s(rx)+z1*c(rx);
+    const f=400/(400+z2*sz);
+    return [cx+x1*sz*f, cy+y1*sz*f, f];
+  });
+  const edges=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+  ctx.save();
+  edges.forEach(([a,b]) => {
+    ctx.globalAlpha=((pts[a][2]+pts[b][2])/2)*0.3;
+    ctx.strokeStyle='#00ffcc'; ctx.lineWidth=0.8;
+    ctx.beginPath(); ctx.moveTo(pts[a][0],pts[a][1]); ctx.lineTo(pts[b][0],pts[b][1]); ctx.stroke();
+  });
+  ctx.restore();
+}
 
-            <div class="portfolio-box">
-                <img src="images/web.png" alt="">
-                <div class="portfolio-layer">
-                    <h4>Web Design</h4>
-                    <p>The porfolio website you see now is made by myself, haha!
-                        Specialized in Frontend with quality UI</p>
-                    <!-- <a href="#"><i class='bx bx-link-external'></i></a> -->
-                </div>
-            </div>
+function loop() {
+  ctx.clearRect(0,0,W,H);
+  drawGrid(); drawConns();
+  particles.forEach(p => { p.update(); p.draw(); });
+  ca += 0.006;
+  wireCube(W*0.78, H*0.35, 55, ca*0.7, ca);
+  wireCube(W*0.85, H*0.68, 28, -ca, ca*0.5);
+  wireCube(W*0.6, H*0.15, 18, ca*0.4, -ca*0.8);
+  requestAnimationFrame(loop);
+}
+loop();
 
-            <div class="portfolio-box">
-                <img src="images/art.png" alt="">
-                <div class="portfolio-layer">
-                    <h4>AI Art</h4>
-                    <p>I have made numerous AI Arts. You can see some of them in my instagram profile.</p>
-                    <a href="https://www.instagram.com/epsilon_infinity/" target="_blank"><i class='bx bx-link-external'></i></a>
-                </div>
-            </div>
+// SCROLL REVEAL
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-            <div class="portfolio-box">
-                <img src="images/robo.png" alt="">
-                <div class="portfolio-layer">
-                    <h4>Computer Vision</h4>
-                    <p>A mask detection program which detects whether a person is wearing mask or not</p>
-                    <a href="https://github.com/Sanjay-V-Nair/FaceMaskDetection" target="_blank"><i class='bx bx-link-external'></i></a>
-                </div>
-            </div>
+// COUNTING
+const sio = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('[data-count]').forEach(el => {
+        const t = parseInt(el.dataset.count); let c = 0;
+        const step = t/40;
+        const ti = setInterval(() => {
+          c += step; if (c >= t) { c = t; clearInterval(ti); }
+          el.textContent = Math.round(c) + '+';
+        }, 30);
+      });
+      sio.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+const sr = document.querySelector('.stat-row');
+if (sr) sio.observe(sr);
 
-            <!-- <div class="portfolio-box">
-                <img src="images/app.png" alt="">
-                <div class="portfolio-layer">
-                    <h4>Simple AR App</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate quasi repudiandae incidunt
-                        earum in alias.</p>
-                    <a href="#"><i class='bx bx-link-external'></i></a>
-                </div>
-            </div> -->
-        </div>
-    </section>
+// SKILL BARS
+const bio = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.skill-bar-fill').forEach(b => { b.style.width = b.dataset.width + '%'; });
+      bio.disconnect();
+    }
+  });
+}, { threshold: 0.2 });
+const bw = document.querySelector('.skill-bar-wrap');
+if (bw) bio.observe(bw);
 
-    <!-- CONTACT SECTION -->
-    <section class="contact" id="contact">
-        <h2 class="heading">Contact <span>Me!</span></h2>
+// 3D TILT
+document.querySelectorAll('.proj-card, .skill-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const dx = (e.clientX - r.left - r.width/2) / r.width * 2;
+    const dy = (e.clientY - r.top - r.height/2) / r.height * 2;
+    card.style.transform = `perspective(600px) rotateY(${dx*8}deg) rotateX(${-dy*8}deg) scale(1.02)`;
+    card.style.transition = 'none';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(600px) rotateY(0) rotateX(0) scale(1)';
+    card.style.transition = 'transform 0.5s cubic-bezier(0.23,1,0.32,1)';
+  });
+});
 
-        <!-- <form action="#">
-            <div class="input-box">
-                <input type="text" placeholder="Full Name">
-                <input type="email" placeholder="Email">
-            </div>
-            <div class="input-box">
-                <input type="number" placeholder="Mobile Number">
-                <input type="text" placeholder="Email Subject">
-            </div>
-            <textarea name="" id="" cols="30" rows="10" placeholder="Your Message"></textarea>
-            <input type="submit" value="Send Message" class="btn">
-        </form> -->
-
-        <h2>Contact me via email : mrsanjayvnair@gmail.com</h2>
-
-    </section>
-
-    <!-- FOOTER SECTION -->
-    <footer class="footer">
-        <div class="footer-text">
-            <p>Copyright &copy; 2025-26 by Sanjay V Nair | All Rights Reserved.</p>
-        </div>
-        <div class="icontop">
-            <a href="#home"><i class='bx bxs-chevron-up-circle'></i></a>
-        </div>
-    </footer>
-
-
-
-    <!-- JS SCRIPT -->
-    <!-- <script src="js/main.js"></script> -->
-
-    <!-- SCROLL REVEAL -->
-    <script src="https://unpkg.com/scrollreveal"></script>
-
-
-    <!-- Load library from the CDN -->
-    <script src="https://unpkg.com/typed.js@2.0.132/dist/typed.umd.js"></script>
-
-    <script>
-        // STRING TYPER
-        const typed = new Typed('#typer', {
-            strings: ['Game Developer', 'Graphics Programmer', 'AR/VR Enthusiast'],
-            typeSpeed: 100,
-            backSpeed: 100,
-            backDelay: 1000,
-            loop: true
-        });
-
-        //Scroll reveal
-        ScrollReveal({
-            reset: false,
-            distance: '80px',
-            duration: 2000,
-            delay: 200
-        });
-        ScrollReveal().reveal('.home-content, .heading', { origin: 'top' });
-        ScrollReveal().reveal('.home-content, .subheading', { origin: 'top' });
-        ScrollReveal().reveal('.home-img, .services-container, .portfolio-box, .contact form', { origin: 'bottom' });
-        ScrollReveal().reveal('.home-content h1, .about-img', { origin: 'left' });
-        ScrollReveal().reveal('.home-content p, .about-content', { origin: 'right' });
-
-
-        //threejs
-        // import * as THREE from 'three';
-
-        // const scene = new THREE.Scene();
-        // const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-        // const renderer = new THREE.WebGLRenderer();
-        // renderer.setSize(window.innerWidth, window.innerHeight);
-        // document.body.appendChild(renderer.domElement);
-
-        // const loader = new THREE.TextureLoader();
-        // const texture = loader.load('pana.png');
-
-        // const geometry = new THREE.SphereGeometry(500, 60, 40);
-        // geometry.scale(-1, 1, 1);
-    </script>
-
+// GLITCH on hero name
+setInterval(() => {
+  const n = document.querySelector('.hero-name');
+  if (!n) return;
+  n.style.filter = `hue-rotate(${Math.random()*360}deg) saturate(2)`;
+  setTimeout(() => { n.style.filter = 'saturate(1)'; }, 100);
+}, 5000);
+</script>
 </body>
-
 </html>
