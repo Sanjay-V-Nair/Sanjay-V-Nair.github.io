@@ -1342,6 +1342,47 @@ class Boss {
   }
 }
 
+class Particle {
+  constructor() { this.reset(true); }
+  reset(rand) {
+    this.x = rand ? Math.random() * W : (Math.random() > 0.5 ? 0 : W);
+    this.y = rand ? Math.random() * H : Math.random() * H;
+    this.z = Math.random() * 1.5 + 0.3;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.size = Math.random() * 1.2 + 0.3;
+    this.alpha = Math.random() * 0.5 + 0.1;
+    const r = Math.random();
+    this.color = r > 0.75 ? '#00ffcc' : r > 0.5 ? '#7b2fff' : r > 0.25 ? '#ff2d6b' : '#ffffff';
+  }
+  update() {
+    const dx = this.x - mouseX, dy = this.y - mouseY;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < 100) { const f = (100-d)/100*0.6; this.vx += (dx/d)*f; this.vy += (dy/d)*f; }
+    this.vx *= 0.97; this.vy *= 0.97;
+    this.x += this.vx * this.z; this.y += this.vy * this.z;
+    if (this.x < -10 || this.x > W+10 || this.y < -10 || this.y > H+10) this.reset(true);
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color; ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * this.z, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+let particles = [];
+// Adjust density: 100 for desktop, ~60 for mobile
+const particleCount = window.innerWidth < 600 ? 60 : 100; 
+
+for (let i = 0; i < particleCount; i++) {
+  particles.push(new Particle());
+}
+
 function wireCube(cx, cy, sz, rx, ry, color = '#00ffcc', alpha = 0.3, thickness = 0.8) {
   const c = Math.cos, s = Math.sin;
   const verts = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
@@ -1371,9 +1412,37 @@ function drawGrid() {
   ctx.restore();
 }
 
+function drawConns() {
+  const maxDist = 90; // Increase this number to see more connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < maxDist) {
+        ctx.save();
+        ctx.globalAlpha = (1 - d / maxDist) * 0.2; // Increased opacity slightly
+        ctx.strokeStyle = '#00ffcc'; // The color of the lines
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
+}
+
 function loop() {
   ctx.clearRect(0,0,W,H);
   drawGrid();
+  drawConns();
+
+  particles.forEach(p => {
+    p.update();
+    p.draw();
+  });
 
   // Spawn generic enemies
   if (Math.random() < 0.015 && enemies.length < 5 && (!boss || !boss.active)) {
