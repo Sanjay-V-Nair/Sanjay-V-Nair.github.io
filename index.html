@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sanjay V Nair | Game Developer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #050508;
@@ -13,15 +13,15 @@
   --accent: #00ffcc;
   --accent2: #ff2d6b;
   --accent3: #7b2fff;
-  --text: #e8e8f0;
-  --muted: #4a4a6a;
+  --text: #ffffff; /* Increased legibility */
+  --muted: #a0a0b8; /* Brighter muted text for readability */
   --glow: 0 0 40px rgba(0,255,204,0.4);
   --glow2: 0 0 40px rgba(255,45,107,0.4);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; overflow-x: hidden; }
+html { scroll-behavior: smooth; overflow-x: hidden; background: var(--bg); }
 body {
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
   font-family: 'Rajdhani', sans-serif;
   cursor: none;
@@ -29,7 +29,7 @@ body {
 }
 .cursor {
   position: fixed;
-  width: 12px; height: 12px;
+  width: 14px; height: 14px;
   background: var(--accent);
   border-radius: 50%;
   pointer-events: none;
@@ -37,11 +37,20 @@ body {
   transform: translate(-50%,-50%);
   transition: transform 0.1s, background 0.3s;
   mix-blend-mode: screen;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cursor::after {
+  content: '';
+  width: 4px; height: 4px;
+  background: #fff;
+  border-radius: 50%;
 }
 .cursor-trail {
   position: fixed;
-  width: 40px; height: 40px;
-  border: 1px solid rgba(0,255,204,0.4);
+  width: 44px; height: 44px;
+  border: 1px solid rgba(0,255,204,0.6);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
@@ -57,8 +66,8 @@ nav {
   justify-content: space-between;
   align-items: center;
   backdrop-filter: blur(20px);
-  background: rgba(5,5,8,0.6);
-  border-bottom: 1px solid rgba(0,255,204,0.05);
+  background: rgba(5,5,8,0.7);
+  border-bottom: 1px solid rgba(0,255,204,0.1);
 }
 .logo-text {
   font-family: 'Bebas Neue', sans-serif;
@@ -70,8 +79,8 @@ nav {
 .nav-links { display: flex; gap: 3rem; list-style: none; }
 .nav-links a {
   font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--muted);
+  font-size: 0.8rem;
+  color: var(--text);
   text-decoration: none;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -89,7 +98,43 @@ nav {
 .nav-links a:hover { color: var(--accent); text-shadow: var(--glow); }
 .nav-links a:hover::after { width: 100%; }
 
+/* GAME HUD */
+.game-hud {
+  position: fixed;
+  bottom: 0.7rem; /* Keep in bottom corner */
+  left: 2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 2px;
+  z-index: 1000; /* High z-index to stay above content */
+  padding: 0.5rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* Add this to handle the boss warning state */
+.game-hud.boss-active {
+  background: rgba(5,5,8,0.9);
+  border: 1px solid var(--accent2);
+  padding: 1rem;
+  color: var(--accent2);
+  animation: pulseWarning 2s infinite;
+  box-shadow: var(--glow2);
+  bottom: 50%; /* Moves to center during boss fight so it's visible */
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 /* HERO */
+#hero-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
 #home {
   position: relative;
   min-height: 100vh;
@@ -97,11 +142,7 @@ nav {
   align-items: center;
   padding: 0 5%;
   overflow: hidden;
-}
-#hero-canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+  background: transparent;
 }
 .hero-content {
   position: relative;
@@ -110,7 +151,7 @@ nav {
 }
 .hero-tag {
   font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 5px;
   color: var(--accent);
   text-transform: uppercase;
@@ -131,20 +172,20 @@ nav {
   position: relative;
 }
 .hero-role {
-  font-size: 1.4rem;
-  font-weight: 300;
+  font-size: 1.5rem;
+  font-weight: 500;
   color: var(--muted);
   letter-spacing: 2px;
   margin: 1rem 0 2rem;
   opacity: 0;
   animation: fadeUp 0.8s 0.7s forwards;
 }
-.hero-role span { color: var(--accent); font-weight: 600; }
+.hero-role span { color: var(--accent); font-weight: 700; }
 .hero-desc {
-  font-size: 1.05rem;
-  color: rgba(232,232,240,0.6);
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.9);
   line-height: 1.8;
-  max-width: 450px;
+  max-width: 480px;
   opacity: 0;
   animation: fadeUp 0.8s 0.9s forwards;
 }
@@ -158,18 +199,18 @@ nav {
 }
 .btn-primary {
   padding: 1rem 2.5rem;
-  background: transparent;
+  background: rgba(0,255,204,0.1);
   border: 1px solid var(--accent);
   color: var(--accent);
   font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   letter-spacing: 3px;
   text-transform: uppercase;
   text-decoration: none;
   cursor: none;
   position: relative;
   overflow: hidden;
-  transition: color 0.3s;
+  transition: all 0.3s;
 }
 .btn-primary::before {
   content: '';
@@ -181,15 +222,15 @@ nav {
   transition: transform 0.3s ease;
   z-index: -1;
 }
-.btn-primary:hover { color: var(--bg); }
+.btn-primary:hover { color: var(--bg); font-weight: 700; }
 .btn-primary:hover::before { transform: scaleX(1); }
 .btn-secondary {
   padding: 1rem 2.5rem;
-  background: transparent;
+  background: rgba(255,255,255,0.05);
   border: 1px solid var(--muted);
-  color: var(--muted);
+  color: #fff;
   font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   letter-spacing: 3px;
   text-transform: uppercase;
   text-decoration: none;
@@ -211,7 +252,7 @@ nav {
 }
 .hero-socials a {
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--muted);
   text-decoration: none;
   letter-spacing: 2px;
@@ -240,20 +281,23 @@ nav {
 }
 .scroll-ind span {
   font-family: 'Space Mono', monospace;
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   letter-spacing: 3px;
   color: var(--muted);
 }
 
+/* SECTIONS BASE */
+section { position: relative; z-index: 1; }
+
 /* ABOUT */
 #about {
-  position: relative;
   min-height: 100vh;
   padding: 10rem 5%;
   display: flex;
   align-items: center;
   gap: 8%;
-  overflow: hidden;
+  background: rgba(5,5,8,0.7);
+  backdrop-filter: blur(8px);
 }
 #about::before {
   content: 'ABOUT';
@@ -263,7 +307,7 @@ nav {
   transform: translateY(-50%) rotate(-90deg);
   font-family: 'Bebas Neue', sans-serif;
   font-size: 20vw;
-  color: rgba(0,255,204,0.02);
+  color: rgba(0,255,204,0.03);
   white-space: nowrap;
   pointer-events: none;
   letter-spacing: 10px;
@@ -285,8 +329,8 @@ nav {
 .about-card-face {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,255,204,0.08), rgba(123,47,255,0.08));
-  border: 1px solid rgba(0,255,204,0.25);
+  background: linear-gradient(135deg, rgba(0,255,204,0.1), rgba(123,47,255,0.1));
+  border: 1px solid rgba(0,255,204,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -297,7 +341,7 @@ nav {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,255,204,0.12) 0%, transparent 60%, rgba(123,47,255,0.12) 100%);
+  background: linear-gradient(135deg, rgba(0,255,204,0.15) 0%, transparent 60%, rgba(123,47,255,0.15) 100%);
 }
 .card-scan {
   position: absolute;
@@ -322,14 +366,14 @@ nav {
 .about-avatar-placeholder {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 7rem;
-  color: rgba(0,255,204,0.15);
+  color: rgba(0,255,204,0.2);
   letter-spacing: 8px;
   z-index: 2;
 }
 .about-text { flex: 1; }
 .section-label {
   font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 5px;
   color: var(--accent);
   text-transform: uppercase;
@@ -345,9 +389,9 @@ nav {
 }
 .section-title .highlight { color: var(--accent); }
 .about-text p {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   line-height: 1.9;
-  color: rgba(232,232,240,0.7);
+  color: rgba(255,255,255,0.9);
   margin-bottom: 1.5rem;
 }
 .stat-row {
@@ -355,7 +399,7 @@ nav {
   gap: 3rem;
   margin-top: 3rem;
   padding-top: 3rem;
-  border-top: 1px solid rgba(0,255,204,0.1);
+  border-top: 1px solid rgba(0,255,204,0.15);
   flex-wrap: wrap;
 }
 .stat-num {
@@ -366,7 +410,7 @@ nav {
 }
 .stat-label {
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 3px;
   color: var(--muted);
   text-transform: uppercase;
@@ -374,7 +418,7 @@ nav {
 }
 .hr-accent {
   width: 60px;
-  height: 2px;
+  height: 3px;
   background: var(--accent);
   margin: 1.5rem 0;
   position: relative;
@@ -384,18 +428,17 @@ nav {
   position: absolute;
   right: -8px; top: 50%;
   transform: translateY(-50%);
-  width: 4px; height: 4px;
+  width: 6px; height: 6px;
   background: var(--accent);
   border-radius: 50%;
 }
 
 /* SKILLS */
 #skills {
-  position: relative;
   min-height: 100vh;
   padding: 10rem 5%;
-  overflow: hidden;
-  background: radial-gradient(ellipse at 50% 0%, rgba(0,255,204,0.04) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,255,204,0.06) 0%, rgba(5,5,8,0.7) 70%);
+  backdrop-filter: blur(8px);
 }
 .skills-grid {
   display: grid;
@@ -404,22 +447,23 @@ nav {
   margin-top: 5rem;
 }
 .skill-card {
-  background: var(--surface);
+  background: rgba(10,10,18,0.8);
   padding: 3rem 2.5rem;
   position: relative;
   overflow: hidden;
   transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
   cursor: none;
+  border: 1px solid rgba(255,255,255,0.02);
 }
 .skill-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,255,204,0.05) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(0,255,204,0.1) 0%, transparent 60%);
   opacity: 0;
   transition: opacity 0.4s;
 }
-.skill-card:hover { transform: translateY(-8px) scale(1.01); }
+.skill-card:hover { transform: translateY(-8px) scale(1.01); border-color: rgba(0,255,204,0.2); }
 .skill-card:hover::before { opacity: 1; }
 .skill-card-border {
   position: absolute;
@@ -438,7 +482,7 @@ nav {
 }
 .skill-card .skill-sub {
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--accent);
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -451,15 +495,16 @@ nav {
   justify-content: space-between;
   margin-bottom: 0.6rem;
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   letter-spacing: 2px;
-  color: var(--muted);
+  color: #fff;
   text-transform: uppercase;
 }
 .skill-bar-track {
-  height: 2px;
-  background: rgba(255,255,255,0.05);
+  height: 4px;
+  background: rgba(255,255,255,0.1);
   position: relative;
+  border-radius: 2px;
 }
 .skill-bar-fill {
   height: 100%;
@@ -467,21 +512,22 @@ nav {
   width: 0;
   transition: width 1.5s cubic-bezier(0.23,1,0.32,1);
   position: relative;
+  border-radius: 2px;
 }
 .skill-bar-fill::after {
   content: '';
   position: absolute;
   right: 0; top: 50%;
   transform: translateY(-50%);
-  width: 8px; height: 8px;
+  width: 10px; height: 10px;
   background: var(--accent);
   border-radius: 50%;
-  box-shadow: 0 0 10px var(--accent);
+  box-shadow: 0 0 12px var(--accent);
 }
 .tools-section { margin-top: 5rem; }
 .tools-title {
   font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 5px;
   color: var(--muted);
   text-transform: uppercase;
@@ -490,34 +536,35 @@ nav {
 .tools-row { display: flex; flex-wrap: wrap; gap: 1rem; }
 .tool-badge {
   padding: 0.6rem 1.5rem;
-  border: 1px solid rgba(0,255,204,0.15);
+  border: 1px solid rgba(0,255,204,0.2);
+  background: rgba(0,255,204,0.02);
   font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 2px;
-  color: var(--muted);
+  color: #fff;
   text-transform: uppercase;
   transition: all 0.3s;
   cursor: none;
 }
 .tool-badge:hover {
+  background: rgba(0,255,204,0.1);
   border-color: var(--accent);
   color: var(--accent);
-  box-shadow: inset 0 0 20px rgba(0,255,204,0.07), var(--glow);
+  box-shadow: inset 0 0 20px rgba(0,255,204,0.1), var(--glow);
 }
 
 /* PROJECTS */
 #projects {
-  position: relative;
   min-height: 100vh;
   padding: 10rem 5%;
-  background: var(--surface);
-  overflow: hidden;
+  background: rgba(10,10,18,0.85);
+  backdrop-filter: blur(8px);
 }
 .projects-header { margin-bottom: 5rem; }
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+  gap: 4px;
 }
 .project-grid .featured { grid-column: span 2; }
 .proj-card {
@@ -527,6 +574,7 @@ nav {
   cursor: none;
   background: var(--bg);
   transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+  border: 1px solid rgba(255,255,255,0.03);
 }
 .proj-card.featured { aspect-ratio: 16/9; }
 .proj-img {
@@ -543,38 +591,38 @@ nav {
 .proj-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(5,5,8,0.97) 0%, rgba(5,5,8,0.4) 50%, transparent 100%);
+  background: linear-gradient(to top, rgba(5,5,8,0.95) 0%, rgba(5,5,8,0.6) 50%, transparent 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 2rem;
+  padding: 2.5rem;
   transform: translateY(65%);
   transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
 }
 .proj-card:hover .proj-overlay { transform: translateY(0); }
 .proj-num {
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--accent);
   letter-spacing: 3px;
   margin-bottom: 0.5rem;
 }
 .proj-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem;
+  font-size: 2.2rem;
   letter-spacing: 2px;
   line-height: 1.1;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 .proj-desc {
-  font-size: 0.85rem;
-  color: rgba(232,232,240,0.6);
+  font-size: 1rem;
+  color: rgba(255,255,255,0.9);
   line-height: 1.6;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 .proj-link {
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 3px;
   color: var(--accent);
   text-decoration: none;
@@ -602,14 +650,13 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(0,255,204,0.04), rgba(123,47,255,0.04));
-  border: 1px solid rgba(0,255,204,0.08);
+  background: linear-gradient(135deg, rgba(0,255,204,0.06), rgba(123,47,255,0.06));
+  border: 1px solid rgba(0,255,204,0.1);
 }
-.proj-placeholder-icon { font-size: 4rem; opacity: 0.2; }
+.proj-placeholder-icon { font-size: 4rem; opacity: 0.4; }
 
 /* CONTACT */
 #contact {
-  position: relative;
   min-height: 70vh;
   padding: 10rem 5%;
   display: flex;
@@ -617,13 +664,8 @@ nav {
   justify-content: center;
   flex-direction: column;
   text-align: center;
-  overflow: hidden;
-}
-.contact-bg {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(0,255,204,0.04) 0%, transparent 70%);
-  pointer-events: none;
+  background: rgba(5,5,8,0.7);
+  backdrop-filter: blur(8px);
 }
 .contact-title {
   font-family: 'Bebas Neue', sans-serif;
@@ -638,7 +680,7 @@ nav {
 }
 .contact-email {
   font-family: 'Space Mono', monospace;
-  font-size: clamp(0.75rem, 2vw, 1.1rem);
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
   color: var(--muted);
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -650,48 +692,119 @@ nav {
 .contact-socials { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
 .soc-link {
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 3px;
-  color: var(--muted);
+  color: #fff;
   text-decoration: none;
   text-transform: uppercase;
   padding: 0.8rem 1.5rem;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
   transition: all 0.3s;
   position: relative;
   overflow: hidden;
+  background: rgba(255,255,255,0.02);
 }
 .soc-link::before {
   content: '';
   position: absolute;
   bottom: 0; left: 0;
-  height: 1px;
+  height: 2px;
   width: 0;
   background: var(--accent);
   transition: width 0.3s;
 }
-.soc-link:hover { color: var(--accent); border-color: rgba(0,255,204,0.2); }
+.soc-link:hover { color: var(--accent); border-color: rgba(0,255,204,0.3); background: rgba(0,255,204,0.05); }
 .soc-link:hover::before { width: 100%; }
+
+/* EASTER EGG */
+#easter-egg {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: rgba(10,10,18,0.95);
+  border: 1px solid var(--accent2);
+  padding: 4rem;
+  text-align: center;
+  z-index: 10000;
+  box-shadow: 0 0 80px rgba(255,45,107,0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
+  backdrop-filter: blur(15px);
+}
+#easter-egg.show {
+  opacity: 1; pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
+}
+.ee-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  color: var(--accent2);
+  letter-spacing: 3px;
+  margin-bottom: 1rem;
+  text-shadow: var(--glow2);
+}
+.ee-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+/* GLITCH MODE (Triggered on Boss Spawn) */
+.glitch-overlay {
+  position: fixed; inset: 0;
+  background: rgba(255, 45, 107, 0.05);
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+  animation: flicker 0.1s infinite;
+}
+body.glitch-mode .glitch-overlay { display: block; }
+@keyframes flicker {
+  0% { opacity: 0.1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.3; }
+}
+body.glitch-mode h1, 
+body.glitch-mode h2, 
+body.glitch-mode p, 
+body.glitch-mode span, 
+body.glitch-mode a {
+  animation: textGlitch 0.15s infinite alternate !important;
+}
+@keyframes textGlitch {
+  0% { transform: skewX(0deg) translate(0px); text-shadow: 2px 0px 0px var(--accent2); }
+  25% { transform: skewX(2deg) translate(-1px); text-shadow: -2px 0px 0px var(--accent); }
+  50% { transform: skewX(-2deg) translate(1px); text-shadow: 2px 0px 0px var(--accent3); }
+  75% { transform: skewX(1deg) translate(-0.5px); text-shadow: -2px 0px 0px var(--accent2); }
+  100% { transform: skewX(0deg) translate(0px); text-shadow: 2px 0px 0px var(--accent); }
+}
 
 /* FOOTER */
 footer {
+  position: relative;
+  z-index: 1;
   padding: 3rem 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid rgba(0,255,204,0.05);
+  border-top: 1px solid rgba(0,255,204,0.1);
+  background: rgba(5,5,8,0.9);
   flex-wrap: wrap;
   gap: 1rem;
 }
 .footer-copy {
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--muted);
   letter-spacing: 2px;
 }
 .footer-back {
   font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--muted);
   text-decoration: none;
   letter-spacing: 3px;
@@ -705,7 +818,7 @@ footer {
   inset: 0;
   pointer-events: none;
   z-index: 1000;
-  opacity: 0.025;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px;
 }
@@ -725,7 +838,7 @@ footer {
 .section-num {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 8rem;
-  color: rgba(0,255,204,0.03);
+  color: rgba(255,255,255,0.03);
   position: absolute;
   top: 5rem;
   right: 5%;
@@ -756,6 +869,10 @@ footer {
   0%, 100% { transform: scaleY(1); opacity: 1; }
   50%       { transform: scaleY(0.5); opacity: 0.4; }
 }
+@keyframes pulseWarning {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
 
 @media (max-width: 900px) {
   .nav-links { display: none; }
@@ -763,16 +880,56 @@ footer {
   .project-grid { grid-template-columns: 1fr 1fr; }
   .project-grid .featured { grid-column: span 2; }
   .hero-socials { display: none; }
+  .game-hud { display: none !important; }
+
+  #home {
+    padding-top: 120px; /* Pushes the content down below the 'SVN' logo */
+    align-items: flex-start; /* Optional: aligns text to top instead of center */
+  }
+
+  .hero-tag {
+    font-size: 0.6rem; /* Slightly smaller to ensure it fits on one line */
+    margin-bottom: 1rem;
+    display: block;
+  }
+  
+  .hero-name {
+    font-size: clamp(4rem, 15vw, 8rem); /* Slightly smaller name for mobile */
+    margin-top: 1rem;
+  }
 }
 @media (max-width: 600px) {
   .project-grid { grid-template-columns: 1fr; }
   .project-grid .featured { grid-column: span 1; }
+  .game-hud { top: 5rem; left: 5%; bottom: auto; right: 5%; padding: 0.8rem; font-size: 0.75rem; text-align: center; }
+  
+  #easter-egg {
+    padding: 2rem 1.5rem;
+    width: 90vw;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .ee-title {
+    font-size: 2.2rem;
+  }
+  .ee-text {
+    font-size: 0.9rem;
+    margin-bottom: 1.8rem;
+  }
+  .btn-primary {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    display: inline-block;
+  }
 }
 </style>
 </head>
 <body>
 
+<canvas id="hero-canvas"></canvas>
 <div class="noise"></div>
+<div class="glitch-overlay"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-trail" id="cursorTrail"></div>
 
@@ -787,17 +944,23 @@ footer {
   </ul>
 </nav>
 
-<!-- HERO -->
+<div id="hud" class="game-hud">TARGETS DESTROYED: <span id="scoreVal" style="color:#fff; font-weight:bold;">0</span></div>
+
+<div id="easter-egg">
+  <h2 class="ee-title">TESSERACT ANOMALY RESOLVED</h2>
+  <p class="ee-text">You've unlocked the developer's hidden core.<br>Code is Art. Art is Play.</p>
+  <a href="#" onclick="document.getElementById('easter-egg').classList.remove('show'); event.preventDefault();" class="btn-primary" style="border-color: var(--accent2); color: var(--accent2);">Return to Reality</a>
+</div>
+
 <section id="home">
-  <canvas id="hero-canvas"></canvas>
   <div class="hero-content">
     <p class="hero-tag">// Game Developer &amp; Graphics Programmer</p>
     <h1 class="hero-name" data-text="SANJAY V NAIR">SANJAY<br>V NAIR</h1>
     <p class="hero-role">Building worlds at the <span>intersection of code &amp; art</span></p>
-    <p class="hero-desc">Passionate game developer crafting experiences that feel alive — blending logic, design, and storytelling into interactive worlds.</p>
+    <p class="hero-desc">Passionate game developer crafting experiences that feel alive — blending logic, design, and storytelling into interactive worlds. Click anywhere to engage targets.</p>
     <div class="hero-btns">
       <a href="#projects" class="btn-primary">View Projects</a>
-      <a href="https://drive.google.com/file/d/1-qjwCr56dJ0nDOT5Bg3r1ME1NgWyI7MP/view" target="_blank" class="btn-secondary">Download CV</a>
+      <a href="https://drive.google.com/file/d/1s-x7sffthOqdasQH9mr7_LtvdkxvEJVs/view" target="_blank" class="btn-secondary">Download CV</a>
     </div>
   </div>
   <div class="hero-socials">
@@ -812,7 +975,6 @@ footer {
   </div>
 </section>
 
-<!-- ABOUT -->
 <section id="about">
   <div class="section-num">01</div>
   <div class="about-3d-box reveal">
@@ -850,7 +1012,6 @@ footer {
   </div>
 </section>
 
-<!-- SKILLS -->
 <section id="skills">
   <div class="section-num">02</div>
   <span class="section-label reveal">// What I Do</span>
@@ -921,7 +1082,6 @@ footer {
   </div>
 </section>
 
-<!-- PROJECTS -->
 <section id="projects">
   <div class="section-num">03</div>
   <div class="projects-header">
@@ -1005,9 +1165,7 @@ footer {
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
-  <div class="contact-bg"></div>
   <div class="section-num">04</div>
   <h2 class="contact-title reveal">LET'S<br>TALK</h2>
   <p class="contact-email reveal reveal-delay-1">
@@ -1041,100 +1199,150 @@ document.addEventListener('mousemove', e => {
   trail.style.left = tx + 'px'; trail.style.top = ty + 'px';
   requestAnimationFrame(animTrail);
 })();
-document.querySelectorAll('a, .proj-card, .skill-card, .tool-badge').forEach(el => {
+document.querySelectorAll('a, .proj-card, .skill-card, .tool-badge, .btn-primary, .btn-secondary').forEach(el => {
   el.addEventListener('mouseenter', () => {
     cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
-    cursor.style.background = '#ff2d6b';
-    trail.style.borderColor = 'rgba(255,45,107,0.5)';
+    cursor.style.background = 'rgba(255,45,107,0.5)';
+    trail.style.borderColor = 'rgba(255,45,107,0.8)';
   });
   el.addEventListener('mouseleave', () => {
     cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-    cursor.style.background = '#00ffcc';
-    trail.style.borderColor = 'rgba(0,255,204,0.4)';
+    cursor.style.background = 'var(--accent)';
+    trail.style.borderColor = 'rgba(0,255,204,0.6)';
   });
 });
 
-// HERO CANVAS
+// GLITCH EFFECT TEXT SCRAMBLE
+let originalTexts = new Map();
+let glitchInterval;
+const glitchChars = '!<>-_\\\\/[]{}—=+*^?#________';
+
+function startGlitch() {
+  document.body.classList.add('glitch-mode');
+  
+  const targetElements = document.querySelectorAll('.section-title, .hero-name');
+  targetElements.forEach(el => {
+    if (!originalTexts.has(el)) originalTexts.set(el, el.innerText);
+  });
+
+  glitchInterval = setInterval(() => {
+    targetElements.forEach(el => {
+      let orig = originalTexts.get(el);
+      if (!orig) return;
+      let glitched = orig.split('').map(c => {
+        // preserve spaces and newlines
+        if (c === ' ' || c === '\n') return c; 
+        return Math.random() < 0.15 ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : c;
+      }).join('');
+      el.innerText = glitched;
+    });
+  }, 100);
+}
+
+function stopGlitch() {
+  document.body.classList.remove('glitch-mode');
+  clearInterval(glitchInterval);
+  document.querySelectorAll('.section-title, .hero-name').forEach(el => {
+    if (originalTexts.has(el)) el.innerText = originalTexts.get(el);
+  });
+}
+
+// HERO CANVAS & GAME
 const canvas = document.getElementById('hero-canvas');
 const ctx = canvas.getContext('2d');
-let W, H, particles = [];
+let W, H;
 function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-resize(); window.addEventListener('resize', () => { resize(); init(); });
+resize(); window.addEventListener('resize', resize);
 
 let mouseX = 0, mouseY = 0;
 document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
 
-class Particle {
-  constructor() { this.reset(true); }
-  reset(rand) {
-    this.x = rand ? Math.random() * W : (Math.random() > 0.5 ? 0 : W);
-    this.y = rand ? Math.random() * H : Math.random() * H;
-    this.z = Math.random() * 1.5 + 0.3;
-    this.vx = (Math.random() - 0.5) * 0.4;
-    this.vy = (Math.random() - 0.5) * 0.4;
-    this.size = Math.random() * 1.2 + 0.3;
-    this.alpha = Math.random() * 0.5 + 0.1;
-    const r = Math.random();
-    this.color = r > 0.75 ? '#00ffcc' : r > 0.5 ? '#7b2fff' : r > 0.25 ? '#ff2d6b' : '#ffffff';
+// Game State
+let score = 0;
+let enemies = [];
+let expParticles = [];
+let boss = null;
+let bossSpawned = false;
+const hudElement = document.getElementById('hud');
+const scoreVal = document.getElementById('scoreVal');
+
+class ExplosionParticle {
+  constructor(x, y, color) {
+    this.x = x; this.y = y;
+    this.vx = (Math.random() - 0.5) * 12;
+    this.vy = (Math.random() - 0.5) * 12;
+    this.size = Math.random() * 4 + 1;
+    this.color = color;
+    this.life = 1.0;
   }
   update() {
-    const dx = this.x - mouseX, dy = this.y - mouseY;
-    const d = Math.sqrt(dx*dx + dy*dy);
-    if (d < 100) { const f = (100-d)/100*0.6; this.vx += (dx/d)*f; this.vy += (dy/d)*f; }
-    this.vx *= 0.97; this.vy *= 0.97;
-    this.x += this.vx * this.z; this.y += this.vy * this.z;
-    if (this.x < -10 || this.x > W+10 || this.y < -10 || this.y > H+10) this.reset(true);
+    this.x += this.vx; this.y += this.vy;
+    this.life -= 0.02;
   }
   draw() {
-    ctx.save();
-    ctx.globalAlpha = this.alpha;
+    ctx.globalAlpha = Math.max(0, this.life);
     ctx.fillStyle = this.color;
-    ctx.shadowColor = this.color; ctx.shadowBlur = 6;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size * this.z, 0, Math.PI*2);
-    ctx.fill();
-    ctx.restore();
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1;
   }
 }
 
-function init() {
-  particles = [];
-  const n = Math.min(Math.floor(W*H/6000), 200);
-  for (let i = 0; i < n; i++) particles.push(new Particle());
-}
-init();
-
-function drawConns() {
-  const maxDist = 90;
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i+1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
-      const d = Math.sqrt(dx*dx + dy*dy);
-      if (d < maxDist) {
-        ctx.save();
-        ctx.globalAlpha = (1-d/maxDist)*0.07;
-        ctx.strokeStyle = '#00ffcc'; ctx.lineWidth = 0.5;
-        ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-        ctx.restore();
-      }
-    }
+class Enemy {
+  constructor() {
+    this.x = Math.random() < 0.5 ? -50 : W + 50;
+    this.y = Math.random() * (H * 0.8) + (H * 0.1);
+    this.vx = (this.x < 0 ? 1 : -1) * (Math.random() * 1.5 + 0.5);
+    this.vy = (Math.random() - 0.5) * 1;
+    this.size = Math.random() * 10 + 15;
+    this.radius = this.size * 1.8; 
+    this.rx = Math.random() * Math.PI;
+    this.ry = Math.random() * Math.PI;
+    this.drx = (Math.random() - 0.5) * 0.05;
+    this.dry = (Math.random() - 0.5) * 0.05;
+    this.color = '#00ffcc';
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    this.rx += this.drx; this.ry += this.dry;
+    if (this.y < 50 || this.y > H - 50) this.vy *= -1;
+  }
+  draw() {
+    wireCube(this.x, this.y, this.size, this.rx, this.ry, this.color, 0.6, 1);
   }
 }
 
-let gOff = 0;
-function drawGrid() {
-  gOff += 0.25;
-  const sp = 80;
-  ctx.save();
-  ctx.strokeStyle = 'rgba(0,255,204,0.025)'; ctx.lineWidth = 1;
-  for (let y = (gOff%sp)-sp; y < H+sp; y += sp) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
-  for (let x = 0; x < W+sp; x += sp) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-  ctx.restore();
+class Boss {
+  constructor() {
+    this.active = true;
+    this.hp = 15;
+    this.maxHp = 15;
+    this.x = W / 2;
+    this.y = -100;
+    this.targetY = H / 3;
+    this.size = 60;
+    this.radius = 100;
+    this.rx = 0;
+    this.ry = 0;
+    this.color = '#ff2d6b';
+  }
+  update() {
+    if (this.y < this.targetY) this.y += 2;
+    this.x = W/2 + Math.sin(Date.now() * 0.001) * (W * 0.3);
+    this.rx += 0.02; this.ry += 0.03;
+  }
+  draw() {
+    wireCube(this.x, this.y, this.size, this.rx, this.ry, this.color, 0.9, 1.5);
+    wireCube(this.x, this.y, this.size * 0.5, -this.rx, -this.ry, '#7b2fff', 0.8, 1);
+    
+    // HP Bar
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.fillRect(this.x - 50, this.y - this.size - 30, 100, 6);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x - 50, this.y - this.size - 30, (this.hp/this.maxHp)*100, 6);
+  }
 }
 
-let ca = 0;
-function wireCube(cx, cy, sz, rx, ry) {
+function wireCube(cx, cy, sz, rx, ry, color = '#00ffcc', alpha = 0.3, thickness = 0.8) {
   const c = Math.cos, s = Math.sin;
   const verts = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
   const pts = verts.map(([x,y,z]) => {
@@ -1146,24 +1354,106 @@ function wireCube(cx, cy, sz, rx, ry) {
   const edges=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
   ctx.save();
   edges.forEach(([a,b]) => {
-    ctx.globalAlpha=((pts[a][2]+pts[b][2])/2)*0.3;
-    ctx.strokeStyle='#00ffcc'; ctx.lineWidth=0.8;
+    ctx.globalAlpha = ((pts[a][2]+pts[b][2])/2) * alpha;
+    ctx.strokeStyle = color; ctx.lineWidth = thickness;
     ctx.beginPath(); ctx.moveTo(pts[a][0],pts[a][1]); ctx.lineTo(pts[b][0],pts[b][1]); ctx.stroke();
   });
   ctx.restore();
 }
 
+function drawGrid() {
+  const sp = 100;
+  ctx.save();
+  ctx.strokeStyle = 'rgba(0,255,204,0.015)'; ctx.lineWidth = 1;
+  const gOff = (Date.now() * 0.02) % sp;
+  for (let y = gOff - sp; y < H+sp; y += sp) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  for (let x = 0; x < W+sp; x += sp) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  ctx.restore();
+}
+
 function loop() {
   ctx.clearRect(0,0,W,H);
-  drawGrid(); drawConns();
-  particles.forEach(p => { p.update(); p.draw(); });
-  ca += 0.006;
-  wireCube(W*0.78, H*0.35, 55, ca*0.7, ca);
-  wireCube(W*0.85, H*0.68, 28, -ca, ca*0.5);
-  wireCube(W*0.6, H*0.15, 18, ca*0.4, -ca*0.8);
+  drawGrid();
+
+  // Spawn generic enemies
+  if (Math.random() < 0.015 && enemies.length < 5 && (!boss || !boss.active)) {
+    enemies.push(new Enemy());
+  }
+
+  // Update & Draw Enemies
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    let en = enemies[i];
+    en.update(); en.draw();
+    if (en.x < -100 || en.x > W + 100) enemies.splice(i, 1);
+  }
+
+  // Boss Logic
+  if (score >= 10 && !bossSpawned) {
+    bossSpawned = true;
+    boss = new Boss();
+    hudElement.classList.add('boss-active');
+    hudElement.innerHTML = 'WARNING: TESSERACT ANOMALY DETECTED';
+    startGlitch();
+  }
+  if (boss && boss.active) {
+    boss.update(); boss.draw();
+  }
+
+  // Update & Draw Particles
+  for (let i = expParticles.length - 1; i >= 0; i--) {
+    let p = expParticles[i];
+    p.update(); p.draw();
+    if (p.life <= 0) expParticles.splice(i, 1);
+  }
+
   requestAnimationFrame(loop);
 }
 loop();
+
+// Hit Detection (Click to Shoot)
+document.addEventListener('mousedown', e => {
+  // Ignore clicks on links/buttons
+  if (e.target.closest('a') || e.target.closest('.btn-primary') || e.target.closest('.btn-secondary')) return;
+
+  let mx = e.clientX, my = e.clientY;
+
+  // Click Feedback Particle
+  for(let k=0; k<3; k++) expParticles.push(new ExplosionParticle(mx, my, '#ffffff'));
+  cursor.style.transform = 'translate(-50%,-50%) scale(0.6)';
+  setTimeout(() => cursor.style.transform = 'translate(-50%,-50%) scale(1)', 100);
+
+  // Check Boss
+  if (boss && boss.active) {
+    let dx = boss.x - mx, dy = boss.y - my;
+    if (Math.sqrt(dx*dx + dy*dy) < boss.radius) {
+      boss.hp--;
+      for(let k=0; k<12; k++) expParticles.push(new ExplosionParticle(mx, my, boss.color));
+      if (boss.hp <= 0) {
+        boss.active = false;
+        hudElement.classList.remove('boss-active');
+        hudElement.innerHTML = 'TARGETS DESTROYED: <span id="scoreVal" style="color:#fff; font-weight:bold;">'+(score + 10)+'</span>';
+        stopGlitch();
+        for(let k=0; k<60; k++) expParticles.push(new ExplosionParticle(boss.x, boss.y, '#7b2fff'));
+        for(let k=0; k<40; k++) expParticles.push(new ExplosionParticle(boss.x, boss.y, '#ff2d6b'));
+        setTimeout(() => { document.getElementById('easter-egg').classList.add('show'); }, 1000);
+      }
+      return; // Stop checking enemies if boss hit
+    }
+  }
+
+  // Check Enemies
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    let en = enemies[i];
+    let dx = en.x - mx, dy = en.y - my;
+    if (Math.sqrt(dx*dx + dy*dy) < en.radius) {
+      for(let k=0; k<15; k++) expParticles.push(new ExplosionParticle(en.x, en.y, en.color));
+      enemies.splice(i, 1);
+      score++;
+      if(!bossSpawned) document.getElementById('scoreVal').innerText = score;
+      break; 
+    }
+  }
+});
 
 // SCROLL REVEAL
 const io = new IntersectionObserver(entries => {
@@ -1217,7 +1507,7 @@ document.querySelectorAll('.proj-card, .skill-card').forEach(card => {
   });
 });
 
-// GLITCH on hero name
+// SUBTLE BACKGROUND GLITCH on hero name
 setInterval(() => {
   const n = document.querySelector('.hero-name');
   if (!n) return;
